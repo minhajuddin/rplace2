@@ -6,6 +6,8 @@ defmodule Rplace2.Application do
   def start(_type, _args) do
     import Supervisor.Spec
 
+    :lines_db = :ets.new(:lines_db, [:named_table, :bag, {:write_concurrency, true}, {:read_concurrency, true}, :public])
+
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Ecto repository

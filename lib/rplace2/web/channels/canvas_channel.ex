@@ -5,7 +5,13 @@ defmodule Rplace2.Web.CanvasChannel do
     {:ok, socket}
   end
 
-  def handle_in("new_message", payload, socket) do
+  def handle_in("ready", _payload, socket) do
+    lines = :ets.tab2list(:lines_db) |> Enum.map(fn {_, line} -> line end )
+    {:reply, {:ok, %{lines: lines}}, socket}
+  end
+
+  def handle_in("new_message", %{"line" => line} = payload, socket) do
+    :ets.insert(:lines_db, {1, line})
     broadcast_from socket, "recv_message", payload
     {:reply, {:ok, %{}}, socket}
   end

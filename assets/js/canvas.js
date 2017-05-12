@@ -55,15 +55,25 @@ ctx.lineTo(40, 10);
 ctx.lineTo(10, 10);
 ctx.stroke();
 
-channel.on("recv_message", msg => {
-  console.log("recv_message", msg);
-  let {x, y} = msg.line[0];
+let drawLine = line => {
+  let {x, y} = line[0];
 
   ctx.beginPath();
   ctx.moveTo(x, y);
-  msg.line.forEach((point) => {
+  line.forEach((point) => {
     let {x, y} = point;
     ctx.lineTo(x, y);
     ctx.stroke();
   })
+}
+
+channel.on("recv_message", msg => {
+  console.log("recv_message", msg);
+  drawLine(msg.line)
 })
+
+channel.push("ready", {})
+  .receive("ok", resp => {
+    console.log("ready")
+    resp.lines.forEach(drawLine)
+  });
