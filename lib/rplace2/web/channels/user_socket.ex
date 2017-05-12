@@ -3,6 +3,7 @@ defmodule Rplace2.Web.UserSocket do
 
   ## Channels
   # channel "room:*", Rplace2.Web.RoomChannel
+  channel "canvas:*", Rplace2.Web.CanvasChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
